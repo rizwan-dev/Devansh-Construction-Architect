@@ -1,11 +1,12 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import SectionTitle from '@/components/SectionTitle'
 import ProjectCard from '@/components/ProjectCard'
+import type { Project } from '@/lib/db'
 import { 
   Building2, 
   Home, 
@@ -24,81 +25,19 @@ import {
 export default function ProjectsPage() {
   const [selectedCategory, setSelectedCategory] = useState('All')
   const [searchTerm, setSearchTerm] = useState('')
+  const [projects, setProjects] = useState<Project[]>([])
+  const [isLoading, setIsLoading] = useState(true)
 
-  const categories = ['All', 'Residential', 'Commercial']
+  useEffect(() => {
+    fetch('/api/projects', { cache: 'no-store' })
+      .then((r) => r.json())
+      .then((d) => setProjects(d.projects || []))
+      .catch(() => setProjects([]))
+      .finally(() => setIsLoading(false))
+  }, [])
 
-  const projects = [
-    {
-      title: 'Galaxy Tower - Dhanori',
-      description: 'Modern luxury residential tower with contemporary design, premium finishes, and smart home features in the heart of Dhanori.',
-      image: '/dhanori.jpeg',
-      category: 'Residential',
-      location: 'Dhanori, Pune',
-      year: '2024',
-      size: '2,50,000 sq ft',
-      features: ['2 & 3 BHK', 'Modern Design', 'Premium Location', 'Smart Features']
-    },
-    {
-      title: 'Awhalwadi Residency',
-      description: 'Premium residential complex with modern amenities, landscaped gardens, and excellent connectivity in Awhalwadi.',
-      image: '/awhalwadi.jpeg',
-      category: 'Residential',
-      location: 'Awhalwadi, Pune',
-      year: '2023',
-      size: '1,80,000 sq ft',
-      features: ['2 & 3 BHK', 'Landscaped Gardens', 'Modern Amenities', 'Excellent Connectivity']
-    },
-    {
-      title: 'Kharadi Business Hub',
-      description: 'State-of-the-art commercial complex designed for modern businesses with flexible workspaces and premium amenities.',
-      image: '/Kharadi.jpeg',
-      category: 'Commercial',
-      location: 'Kharadi, Pune',
-      year: '2023',
-      size: '3,20,000 sq ft',
-      features: ['Flexible Workspaces', 'Modern Amenities', 'Premium Location', 'Business Hub']
-    },
-    {
-      title: 'Junnar Heights',
-      description: 'Luxurious residential development offering premium living spaces with modern design and scenic views.',
-      image: '/Junnar.jpeg',
-      category: 'Residential',
-      location: 'Junnar, Pune',
-      year: '2022',
-      size: '1,50,000 sq ft',
-      features: ['Premium Living', 'Scenic Views', 'Modern Design', 'Luxury Amenities']
-    },
-    {
-      title: 'Lohegaon Row Houses',
-      description: 'Exclusive row house development with contemporary architecture, private gardens, and premium finishes.',
-      image: '/Lohegaon Row House.jpeg',
-      category: 'Residential',
-      location: 'Lohegaon, Pune',
-      year: '2022',
-      size: '2,00,000 sq ft',
-      features: ['Row Houses', 'Private Gardens', 'Contemporary Design', 'Premium Finishes']
-    },
-    {
-      title: 'Manjiri Gardens',
-      description: 'Beautiful residential project with landscaped gardens, modern amenities, and family-friendly environment.',
-      image: '/Manjiri.jpeg',
-      category: 'Residential',
-      location: 'Manjiri, Pune',
-      year: '2023',
-      size: '1,40,000 sq ft',
-      features: ['Landscaped Gardens', 'Family Friendly', 'Modern Amenities', 'Beautiful Design']
-    },
-    {
-      title: 'Satara Plaza',
-      description: 'Modern commercial plaza offering retail and office spaces with contemporary design and excellent connectivity.',
-      image: '/Satara.jpeg',
-      category: 'Commercial',
-      location: 'Satara, Maharashtra',
-      year: '2022',
-      size: '2,80,000 sq ft',
-      features: ['Retail Spaces', 'Office Complex', 'Modern Design', 'Excellent Connectivity']
-    }
-  ]
+  // Build the category list dynamically from the live projects.
+  const categories = ['All', ...Array.from(new Set(projects.map((p) => p.category).filter(Boolean)))]
 
   const filteredProjects = projects.filter(project => {
     const matchesCategory = selectedCategory === 'All' || project.category === selectedCategory
@@ -159,7 +98,7 @@ export default function ProjectsPage() {
             {/* Category Filter */}
             <div className="flex flex-wrap gap-2">
               {categories.map((category) => {
-                const Icon = categoryIcons[category as keyof typeof categoryIcons]
+                const Icon = categoryIcons[category as keyof typeof categoryIcons] || Building2
                 return (
                   <button
                     key={category}
@@ -193,11 +132,16 @@ export default function ProjectsPage() {
       {/* Projects Grid */}
       <section className="section-padding">
         <div className="container-custom">
-          {filteredProjects.length > 0 ? (
+          {isLoading ? (
+            <div className="text-center py-16">
+              <div className="w-10 h-10 border-2 border-primary-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+              <p className="text-gray-600">Loading projects...</p>
+            </div>
+          ) : filteredProjects.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {filteredProjects.map((project, index) => (
                 <motion.div
-                  key={project.title}
+                  key={project.id}
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
