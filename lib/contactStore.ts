@@ -1,68 +1,72 @@
-// Simple in-memory store for contact submissions
-// In production, this would be replaced with a database
+// Contact form submissions.
+// Persisted via lib/store.ts — Vercel KV in production, local JSON files in dev.
+// (Previously in-memory, which did not survive restarts / serverless instances.)
 
-export interface ContactSubmission {
-  id: string
-  name: string
-  email: string
-  phone: string
-  subject: string
-  message: string
-  timestamp: Date
-  status: 'new' | 'read' | 'replied'
+import { readDoc, writeDoc } from './store'
+import type { ContactSubmission } from './types'
+
+export type { ContactSubmission } from './types'
+
+const SUBMISSIONS_KEY = 'submissions'
+
+async function getSubmissions(): Promise<ContactSubmission[]> {
+  return readDoc<ContactSubmission[]>(SUBMISSIONS_KEY, [])
 }
 
-// In-memory storage (will reset on server restart)
-let submissions: ContactSubmission[] = []
+async function saveSubmissions(submissions: ContactSubmission[]): Promise<void> {
+  await writeDoc(SUBMISSIONS_KEY, submissions)
+}
 
-export const addContactSubmission = (submission: Omit<ContactSubmission, 'id' | 'timestamp' | 'status'>): ContactSubmission => {
+export const addContactSubmission = async (
+  submission: Omit<ContactSubmission, 'id' | 'timestamp' | 'status'>
+): Promise<ContactSubmission> => {
+  const submissions = await getSubmissions()
   const newSubmission: ContactSubmission = {
     ...submission,
-    id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
-    timestamp: new Date(),
-    status: 'new'
+    id: Date.now().toString() + Math.random().toString(36).substring(2, 11),
+    timestamp: new Date().toISOString(),
+    status: 'new',
   }
-  
-  submissions.unshift(newSubmission) // Add to beginning of array
+  submissions.unshift(newSubmission)
+  await saveSubmissions(submissions)
   return newSubmission
 }
 
-export const getAllSubmissions = (): ContactSubmission[] => {
-  return [...submissions] // Return copy to prevent direct mutation
+export const getAllSubmissions = async (): Promise<ContactSubmission[]> => {
+  return getSubmissions()
 }
 
-export const getSubmissionById = (id: string): ContactSubmission | null => {
-  return submissions.find(submission => submission.id === id) || null
+export const getSubmissionById = async (id: string): Promise<ContactSubmission | null> => {
+  const submissions = await getSubmissions()
+  return submissions.find((s) => s.id === id) || null
 }
 
-export const updateSubmissionStatus = (id: string, status: ContactSubmission['status']): boolean => {
-  const submission = submissions.find(submission => submission.id === id)
-  if (submission) {
-    submission.status = status
-    return true
-  }
-  return false
+export const updateSubmissionStatus = async (
+  id: string,
+  status: ContactSubmission['status']
+): Promise<boolean> => {
+  const submissions = await getSubmissions()
+  const submission = submissions.find((s) => s.id === id)
+  if (!submission) return false
+  submission.status = status
+  await saveSubmissions(submissions)
+  return true
 }
 
-export const deleteSubmission = (id: string): boolean => {
-  const index = submissions.findIndex(submission => submission.id === id)
-  if (index !== -1) {
-    submissions.splice(index, 1)
-    return true
-  }
-  return false
+export const deleteSubmission = async (id: string): Promise<boolean> => {
+  const submissions = await getSubmissions()
+  const next = submissions.filter((s) => s.id !== id)
+  if (next.length === submissions.length) return false
+  await saveSubmissions(next)
+  return true
 }
 
-export const getSubmissionStats = () => {
-  const total = submissions.length
-  const newCount = submissions.filter(s => s.status === 'new').length
-  const readCount = submissions.filter(s => s.status === 'read').length
-  const repliedCount = submissions.filter(s => s.status === 'replied').length
-  
+export const getSubmissionStats = async () => {
+  const submissions = await getSubmissions()
   return {
-    total,
-    new: newCount,
-    read: readCount,
-    replied: repliedCount
+    total: submissions.length,
+    new: submissions.filter((s) => s.status === 'new').length,
+    read: submissions.filter((s) => s.status === 'read').length,
+    replied: submissions.filter((s) => s.status === 'replied').length,
   }
 }

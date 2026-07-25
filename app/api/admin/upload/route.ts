@@ -8,8 +8,9 @@ export const dynamic = 'force-dynamic'
 const ALLOWED = ['image/jpeg', 'image/png', 'image/webp', 'image/jpg']
 const MAX_BYTES = 8 * 1024 * 1024 // 8 MB
 
-// POST — upload a project image (admin only). Saves to /public/uploads and
-// returns the public path (e.g. "/uploads/1699999999-galaxy.jpeg").
+// POST — upload a project image (admin only).
+// Uses Vercel Blob when BLOB_READ_WRITE_TOKEN is configured (production),
+// otherwise saves to /public/uploads (local development). Returns the public URL.
 export async function POST(request: NextRequest) {
   if (!checkAdminAuth(request)) {
     return NextResponse.json({ error: 'Unauthorized access' }, { status: 401 })
@@ -31,16 +32,26 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'File too large (max 8 MB).' }, { status: 400 })
     }
 
+    const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_')
+    const fileName = `${Date.now()}-${safeName}`
+
+    // Production: Vercel Blob
+    if (process.env.BLOB_READ_WRITE_TOKEN) {
+      const { put } = await import('@vercel/blob')
+      const blob = await put(`projects/${fileName}`, file, {
+        access: 'public',
+        contentType: file.type,
+      })
+      return NextResponse.json({ success: true, path: blob.url })
+    }
+
+    // Local dev: write to public/uploads
     const bytes = Buffer.from(await file.arrayBuffer())
     const uploadsDir = path.join(process.cwd(), 'public', 'uploads')
     if (!fs.existsSync(uploadsDir)) {
       fs.mkdirSync(uploadsDir, { recursive: true })
     }
-
-    const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_')
-    const fileName = `${Date.now()}-${safeName}`
     fs.writeFileSync(path.join(uploadsDir, fileName), bytes)
-
     return NextResponse.json({ success: true, path: `/uploads/${fileName}` })
   } catch (error) {
     console.error('Upload error:', error)

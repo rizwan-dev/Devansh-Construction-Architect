@@ -6,7 +6,7 @@ import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import SectionTitle from '@/components/SectionTitle'
 import ProjectCard from '@/components/ProjectCard'
-import type { Project } from '@/lib/db'
+import type { Project } from '@/lib/types'
 import { 
   Building2, 
   Home, 

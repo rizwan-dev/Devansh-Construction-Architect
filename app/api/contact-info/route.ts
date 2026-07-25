@@ -7,7 +7,7 @@ export const dynamic = 'force-dynamic'
 // GET is public — the website uses it to render contact details site-wide.
 export async function GET() {
   try {
-    return NextResponse.json({ contact: getContactInfo() })
+    return NextResponse.json({ contact: await getContactInfo() })
   } catch (error) {
     return NextResponse.json({ error: 'Failed to fetch contact info' }, { status: 500 })
   }
@@ -43,7 +43,7 @@ export async function PUT(request: NextRequest) {
         .map((w: any) => ({ day: String(w.day || '').trim(), hours: String(w.hours || '').trim() }))
     }
 
-    const contact = updateContactInfo(update)
+    const contact = await updateContactInfo(update)
     return NextResponse.json({ success: true, contact })
   } catch (error) {
     return NextResponse.json({ error: 'Failed to update contact info' }, { status: 500 })

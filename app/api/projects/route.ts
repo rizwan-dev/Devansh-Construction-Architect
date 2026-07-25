@@ -14,7 +14,7 @@ export const dynamic = 'force-dynamic'
 // GET is public — the website uses it to render the projects portfolio.
 export async function GET() {
   try {
-    return NextResponse.json({ projects: getAllProjects() })
+    return NextResponse.json({ projects: await getAllProjects() })
   } catch (error) {
     return NextResponse.json({ error: 'Failed to fetch projects' }, { status: 500 })
   }
@@ -60,7 +60,7 @@ export async function POST(request: NextRequest) {
     if ('error' in parsed) {
       return NextResponse.json({ error: parsed.error }, { status: 400 })
     }
-    const project = addProject(parsed)
+    const project = await addProject(parsed)
     return NextResponse.json({ success: true, project })
   } catch (error) {
     return NextResponse.json({ error: 'Failed to create project' }, { status: 500 })
@@ -82,7 +82,7 @@ export async function PUT(request: NextRequest) {
     if ('error' in parsed) {
       return NextResponse.json({ error: parsed.error }, { status: 400 })
     }
-    const project = updateProject(id, parsed)
+    const project = await updateProject(id, parsed)
     if (!project) {
       return NextResponse.json({ error: 'Project not found' }, { status: 404 })
     }
@@ -102,7 +102,7 @@ export async function DELETE(request: NextRequest) {
     if (!id) {
       return NextResponse.json({ error: 'Project id is required' }, { status: 400 })
     }
-    const success = deleteProject(id)
+    const success = await deleteProject(id)
     if (!success) {
       return NextResponse.json({ error: 'Project not found' }, { status: 404 })
     }
