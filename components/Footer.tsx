@@ -4,8 +4,10 @@ import Link from 'next/link'
 import { motion } from 'framer-motion'
 import RippleButton from '@/components/RippleButton'
 import { Phone, Mail, MapPin } from 'lucide-react'
+import { useContactInfo } from '@/lib/useContactInfo'
 
 const Footer = () => {
+  const contact = useContactInfo()
   const services = [
     'Architectural Design',
     '3D Visualization',
@@ -69,13 +71,17 @@ const Footer = () => {
                 <Phone className="w-5 h-5 text-primary-400" />
                 <span>Call Us</span>
               </div>
-              <RippleButton href="tel:+917249400319" className="bg-primary-600 hover:bg-primary-700 w-full text-black">
+              <RippleButton href={`tel:${contact.phone}`} className="bg-primary-600 hover:bg-primary-700 w-full text-black">
                 <Phone className="w-4 h-4" />
                 <span>Call Now</span>
               </RippleButton>
+              <a href={`mailto:${contact.email}`} className="flex items-center space-x-3 hover:text-primary-400 transition-colors duration-200 break-all">
+                <Mail className="w-5 h-5 text-primary-400 flex-shrink-0" />
+                <span>{contact.email}</span>
+              </a>
               <div className="flex items-center space-x-3">
-                <MapPin className="w-5 h-5 text-primary-400" />
-                <span>Office No.09,C-Wing,Yogin Belva,Santnagar,Lohegaon,Pune-411047</span>
+                <MapPin className="w-5 h-5 text-primary-400 flex-shrink-0" />
+                <span>{contact.address}</span>
               </div>
             </motion.div>
           </div>

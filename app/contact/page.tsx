@@ -6,6 +6,7 @@ import Footer from '@/components/Footer'
 import SectionTitle from '@/components/SectionTitle'
 import ContactForm from '@/components/ContactForm'
 import RippleButton from '@/components/RippleButton'
+import { useContactInfo } from '@/lib/useContactInfo'
 import { 
   Phone, 
   Mail, 
@@ -23,19 +24,29 @@ import {
 
 
 export default function ContactPage() {
+  const contact = useContactInfo()
+
   const contactMethods = [
     {
       icon: Phone,
       title: 'Call Us',
       description: 'Speak directly with our experts',
-      action: 'tel:7249400319',
+      action: `tel:${contact.phone}`,
       color: 'bg-green-100 text-green-600'
+    },
+    {
+      icon: Mail,
+      title: 'Email Us',
+      description: 'Send us your enquiry',
+      value: contact.email,
+      action: `mailto:${contact.email}`,
+      color: 'bg-blue-100 text-blue-600'
     },
     {
       icon: MapPin,
       title: 'Visit Us',
       description: 'Come to our office',
-      value: 'Office No.09,C-Wing,Yogin Belva,Santnagar,Lohegaon,Pune-411047',
+      value: contact.address,
       action: '#',
       color: 'bg-red-100 text-red-600'
     },
@@ -43,16 +54,12 @@ export default function ContactPage() {
       icon: MessageCircle,
       title: 'WhatsApp',
       description: 'Quick chat with our team',
-      action: 'https://wa.me/917249400319',
+      action: `https://wa.me/${contact.whatsapp}`,
       color: 'bg-green-100 text-green-600'
     }
   ]
 
-  const workingHours = [
-    { day: 'Monday - Friday', hours: '9:00 AM - 6:00 PM' },
-    { day: 'Saturday', hours: '9:00 AM - 4:00 PM' },
-    { day: 'Sunday', hours: 'Closed' }
-  ]
+  const workingHours = contact.workingHours
 
   const whyContactUs = [
     {
@@ -112,7 +119,7 @@ export default function ContactPage() {
             center={true}
           />
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-16">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-16">
             {contactMethods.map((method, index) => (
               <motion.div
                 key={method.title}
@@ -135,7 +142,15 @@ export default function ContactPage() {
                 <div className="mt-auto">
                   <RippleButton href={method.action} className="w-full">
                     <method.icon className="w-4 h-4" />
-                    <span>{method.title === 'Call Us' ? 'Call Now' : method.title === 'WhatsApp' ? 'Chat Now' : 'Visit'}</span>
+                    <span>
+                      {method.title === 'Call Us'
+                        ? 'Call Now'
+                        : method.title === 'WhatsApp'
+                        ? 'Chat Now'
+                        : method.title === 'Email Us'
+                        ? 'Email Now'
+                        : 'Visit'}
+                    </span>
                   </RippleButton>
                 </div>
               </motion.div>
@@ -259,7 +274,7 @@ export default function ContactPage() {
               <div className="aspect-[16/9] w-full">
                 {/* Google Maps Embed */}
                 <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3782.2613173278876!2d73.930597071165!3d18.59681405132737!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2sDevansh%20Constro%20%26%20Architect!5e0!3m2!1sen!2sin!4v1628000000000!5m2!1sen!2sin"
+                  src={contact.mapEmbedUrl}
                   width="100%"
                   height="100%"
                   style={{ border: 0 }}
@@ -290,11 +305,11 @@ export default function ContactPage() {
               Don&apos;t wait! Contact us today and let&apos;s discuss how we can bring your construction or architectural vision to life.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <RippleButton href="tel:7249400319" className="bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/30 text-white">
+              <RippleButton href={`tel:${contact.phone}`} className="bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/30 text-white">
                 <Phone className="w-5 h-5" />
                 <span>Call Now</span>
               </RippleButton>
-              <RippleButton href="https://wa.me/917249400319" className="bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/30 text-white">
+              <RippleButton href={`https://wa.me/${contact.whatsapp}`} className="bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/30 text-white">
                 <MessageCircle className="w-5 h-5" />
                 <span>WhatsApp</span>
               </RippleButton>

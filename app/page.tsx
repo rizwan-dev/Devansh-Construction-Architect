@@ -7,6 +7,7 @@ import Hero from '@/components/Hero'
 import SectionTitle from '@/components/SectionTitle'
 import ServiceCard from '@/components/ServiceCard'
 import RippleButton from '@/components/RippleButton'
+import { useContactInfo } from '@/lib/useContactInfo'
 import { 
   Building2, 
   PenTool, 
@@ -22,6 +23,8 @@ import {
 } from 'lucide-react'
 
 export default function HomePage() {
+  const contact = useContactInfo()
+
   const services = [
     {
       icon: PenTool,
@@ -204,7 +207,7 @@ export default function HomePage() {
             
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <a
-                href="tel:+917249400319"
+                href={`tel:${contact.phone}`}
                 className="bg-primary-600 hover:bg-primary-700 text-white font-semibold px-8 py-4 rounded-lg transition-colors duration-200 flex items-center space-x-2"
               >
                 <Phone className="w-5 h-5" />
@@ -219,22 +222,22 @@ export default function HomePage() {
       <section className="bg-primary-600 py-6">
         <div className="container-custom">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center text-white">
-            <a href="tel:+917249400319" className="flex items-center justify-center space-x-3 hover:bg-primary-700 rounded-lg px-4 py-2 transition-colors duration-200">
+            <a href={`tel:${contact.phone}`} className="flex items-center justify-center space-x-3 hover:bg-primary-700 rounded-lg px-4 py-2 transition-colors duration-200">
               <Phone className="w-5 h-5" />
               <div className="font-semibold">Call Us</div>
             </a>
-            <a href="mailto:Devanshconstro@gmail.com" className="flex items-center justify-center space-x-3 hover:bg-primary-700 rounded-lg px-4 py-2 transition-colors duration-200">
+            <a href={`mailto:${contact.email}`} className="flex items-center justify-center space-x-3 hover:bg-primary-700 rounded-lg px-4 py-2 transition-colors duration-200">
               <Mail className="w-5 h-5" />
               <div>
                 <div className="font-semibold">Email Us</div>
-                <div className="text-sm text-primary-100">Devanshconstro@gmail.com</div>
+                <div className="text-sm text-primary-100">{contact.email}</div>
               </div>
             </a>
             <div className="flex items-center justify-center space-x-3">
               <MapPin className="w-5 h-5" />
               <div>
                 <div className="font-semibold">Visit Us</div>
-                <div className="text-sm text-primary-100">Lohegaon, Pune-411047</div>
+                <div className="text-sm text-primary-100">{contact.addressShort}</div>
               </div>
             </div>
           </div>

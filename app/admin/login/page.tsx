@@ -24,8 +24,6 @@ export default function AdminLoginPage() {
     setIsLoading(true)
     setError('')
 
-    console.log('Submitting login form with:', { username, password })
-
     try {
       const response = await fetch('/api/admin/login', {
         method: 'POST',
@@ -36,10 +34,8 @@ export default function AdminLoginPage() {
       })
 
       const data = await response.json()
-      console.log('Login response:', { status: response.status, data })
 
       if (response.ok) {
-        console.log('Login successful, setting localStorage and redirecting')
         localStorage.setItem('admin_logged_in', 'true')
         // Add a small delay to ensure localStorage is set
         setTimeout(() => {
@@ -113,11 +109,6 @@ export default function AdminLoginPage() {
           </button>
         </form>
 
-        <div className="mt-6 text-center">
-          <p className="text-xs text-gray-500">
-            Default credentials: admin / devansh123
-          </p>
-        </div>
       </div>
     </div>
   )
