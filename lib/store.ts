@@ -9,14 +9,30 @@
 import fs from 'fs'
 import path from 'path'
 
-const kvEnabled = !!(process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN)
+// Redis-backed storage is enabled when a Vercel KV store or an Upstash Redis
+// store is connected. Vercel provisions Redis via the Marketplace (Upstash),
+// which may inject either the KV_* or the UPSTASH_* env var names — support both.
+const hasVercelKv = !!(process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN)
+const hasUpstash = !!(
+  process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN
+)
+const kvEnabled = hasVercelKv || hasUpstash
 
-// Lazily import @vercel/kv only when KV is actually enabled.
+// Lazily create the Redis client only when needed. Both @vercel/kv and the
+// @upstash/redis client expose compatible get/set with automatic JSON
+// (de)serialization, so callers can store plain objects/arrays.
 let kvClient: any = null
 async function getKv() {
-  if (!kvClient) {
+  if (kvClient) return kvClient
+  if (hasVercelKv) {
     const mod = await import('@vercel/kv')
     kvClient = mod.kv
+  } else {
+    const { Redis } = await import('@upstash/redis')
+    kvClient = new Redis({
+      url: process.env.UPSTASH_REDIS_REST_URL as string,
+      token: process.env.UPSTASH_REDIS_REST_TOKEN as string,
+    })
   }
   return kvClient
 }
