@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import type { ContactInfo } from '@/lib/db'
+import type { ContactInfo } from '@/lib/types'
 
 // Defaults mirror the seed values so the UI has sensible content during the
 // first render / if the API is briefly unavailable.

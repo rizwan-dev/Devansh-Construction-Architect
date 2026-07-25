@@ -2,8 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { ContactSubmission } from '@/lib/contactStore'
-import type { Project, ContactInfo } from '@/lib/db'
+import type { ContactSubmission, Project, ContactInfo } from '@/lib/types'
 
 type Tab = 'submissions' | 'projects' | 'contact'
 

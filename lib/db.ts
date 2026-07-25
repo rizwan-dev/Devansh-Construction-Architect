@@ -1,46 +1,14 @@
-// File-based JSON persistence for projects and contact info.
-// This is SERVER-ONLY (uses the Node fs module). Do not import from client components.
-//
-// Data is stored under <project-root>/data/*.json so that edits made in the admin
-// portal survive server restarts. If a file does not exist yet, it is seeded from
-// the DEFAULT_* values below (which mirror the original hard-coded content).
-//
-// NOTE: On serverless hosts (e.g. Vercel) the filesystem is read-only/ephemeral.
-// For production, swap the read/write helpers here for a real database.
+// Data access for projects and contact info.
+// Persisted via lib/store.ts — Vercel KV in production, local JSON files in dev.
+// SERVER-ONLY. Do not import from client components (import types from lib/types).
 
-import fs from 'fs'
-import path from 'path'
+import { readDoc, writeDoc } from './store'
+import type { Project, ContactInfo } from './types'
 
-const DATA_DIR = path.join(process.cwd(), 'data')
-const PROJECTS_FILE = path.join(DATA_DIR, 'projects.json')
-const CONTACT_FILE = path.join(DATA_DIR, 'contact.json')
+export type { Project, ContactInfo, WorkingHour } from './types'
 
-export interface Project {
-  id: string
-  title: string
-  description: string
-  image: string
-  category: string
-  location: string
-  year: string
-  size: string
-  features: string[]
-}
-
-export interface WorkingHour {
-  day: string
-  hours: string
-}
-
-export interface ContactInfo {
-  phone: string // used for tel: links, e.g. "7249400319"
-  whatsapp: string // digits only incl. country code for wa.me, e.g. "917249400319"
-  email: string
-  address: string // full postal address
-  addressShort: string // short display, e.g. "Lohegaon, Pune-411047"
-  mapEmbedUrl: string
-  workingHours: WorkingHour[]
-}
+const PROJECTS_KEY = 'projects'
+const CONTACT_KEY = 'contact'
 
 const DEFAULT_PROJECTS: Project[] = [
   {
@@ -144,32 +112,6 @@ const DEFAULT_CONTACT: ContactInfo = {
   ],
 }
 
-function ensureDataDir() {
-  if (!fs.existsSync(DATA_DIR)) {
-    fs.mkdirSync(DATA_DIR, { recursive: true })
-  }
-}
-
-function readJson<T>(file: string, fallback: T): T {
-  try {
-    ensureDataDir()
-    if (!fs.existsSync(file)) {
-      fs.writeFileSync(file, JSON.stringify(fallback, null, 2), 'utf-8')
-      return fallback
-    }
-    const raw = fs.readFileSync(file, 'utf-8')
-    return JSON.parse(raw) as T
-  } catch (error) {
-    console.error(`Failed to read ${file}:`, error)
-    return fallback
-  }
-}
-
-function writeJson<T>(file: string, data: T): void {
-  ensureDataDir()
-  fs.writeFileSync(file, JSON.stringify(data, null, 2), 'utf-8')
-}
-
 function slugify(text: string): string {
   return (
     text
@@ -182,55 +124,75 @@ function slugify(text: string): string {
 
 /* ----------------------------- Projects ----------------------------- */
 
-export function getAllProjects(): Project[] {
-  return readJson<Project[]>(PROJECTS_FILE, DEFAULT_PROJECTS)
+export async function getAllProjects(): Promise<Project[]> {
+  return readDoc<Project[]>(PROJECTS_KEY, DEFAULT_PROJECTS)
 }
 
-export function getProjectById(id: string): Project | null {
-  return getAllProjects().find((p) => p.id === id) || null
+export async function getProjectById(id: string): Promise<Project | null> {
+  const projects = await getAllProjects()
+  return projects.find((p) => p.id === id) || null
 }
 
-export function addProject(data: Omit<Project, 'id'>): Project {
-  const projects = getAllProjects()
-  let id = slugify(data.title)
-  // Ensure unique id
-  let suffix = 1
+export async function addProject(data: Omit<Project, 'id'>): Promise<Project> {
+  const projects = await getAllProjects()
   const existingIds = new Set(projects.map((p) => p.id))
+  let id = slugify(data.title)
+  let suffix = 1
   while (existingIds.has(id)) {
     id = `${slugify(data.title)}-${++suffix}`
   }
   const project: Project = { id, ...data }
   projects.unshift(project)
-  writeJson(PROJECTS_FILE, projects)
+  await writeDoc(PROJECTS_KEY, projects)
   return project
 }
 
-export function updateProject(id: string, data: Partial<Omit<Project, 'id'>>): Project | null {
-  const projects = getAllProjects()
+export async function updateProject(
+  id: string,
+  data: Partial<Omit<Project, 'id'>>
+): Promise<Project | null> {
+  const projects = await getAllProjects()
   const index = projects.findIndex((p) => p.id === id)
   if (index === -1) return null
   projects[index] = { ...projects[index], ...data, id }
-  writeJson(PROJECTS_FILE, projects)
+  await writeDoc(PROJECTS_KEY, projects)
   return projects[index]
 }
 
-export function deleteProject(id: string): boolean {
-  const projects = getAllProjects()
+export async function deleteProject(id: string): Promise<boolean> {
+  const projects = await getAllProjects()
   const next = projects.filter((p) => p.id !== id)
   if (next.length === projects.length) return false
-  writeJson(PROJECTS_FILE, next)
+  await writeDoc(PROJECTS_KEY, next)
   return true
 }
 
 /* --------------------------- Contact info --------------------------- */
 
-export function getContactInfo(): ContactInfo {
-  return readJson<ContactInfo>(CONTACT_FILE, DEFAULT_CONTACT)
+export async function getContactInfo(): Promise<ContactInfo> {
+  return readDoc<ContactInfo>(CONTACT_KEY, DEFAULT_CONTACT)
 }
 
-export function updateContactInfo(data: Partial<ContactInfo>): ContactInfo {
-  const current = getContactInfo()
+export async function updateContactInfo(data: Partial<ContactInfo>): Promise<ContactInfo> {
+  const current = await getContactInfo()
   const next: ContactInfo = { ...current, ...data }
-  writeJson(CONTACT_FILE, next)
+  await writeDoc(CONTACT_KEY, next)
   return next
+}
+
+/* ------------------------------- Seeding ------------------------------- */
+
+// Seed the store with the current website content (the default projects and
+// contact info). When `force` is false, this only fills in keys that are empty
+// (reads auto-seed anyway). When `force` is true, it overwrites with defaults.
+export async function seedDefaults(force = false): Promise<{ projects: number; contact: boolean }> {
+  if (force) {
+    await writeDoc(PROJECTS_KEY, DEFAULT_PROJECTS)
+    await writeDoc(CONTACT_KEY, DEFAULT_CONTACT)
+    return { projects: DEFAULT_PROJECTS.length, contact: true }
+  }
+  // Non-force: getAll* auto-seeds empty keys with the defaults.
+  const projects = await getAllProjects()
+  await getContactInfo()
+  return { projects: projects.length, contact: true }
 }

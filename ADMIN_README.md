@@ -16,11 +16,19 @@ Create a `.env.local` file in the root directory with the following variables:
 # Admin Authentication
 ADMIN_USERNAME=admin
 ADMIN_PASSWORD=devansh123
-
-# Next.js Configuration
-NEXTAUTH_SECRET=your-secret-key-here
-NEXTAUTH_URL=http://localhost:3000
+ADMIN_SECRET=any-long-random-string   # signs the admin session token
 ```
+
+### Vercel storage (production)
+When deployed on Vercel, connect a **KV (Upstash Redis)** store and a **Blob** store to the project. Vercel injects these automatically — you do **not** set them by hand:
+
+```bash
+KV_REST_API_URL=...        # from the connected KV store
+KV_REST_API_TOKEN=...      # from the connected KV store
+BLOB_READ_WRITE_TOKEN=...  # from the connected Blob store
+```
+
+If `KV_REST_API_URL`/`KV_REST_API_TOKEN` are absent (e.g. local dev), the app persists to local JSON files under `data/` instead. If `BLOB_READ_WRITE_TOKEN` is absent, uploads are written to `public/uploads/`.
 
 ## Features
 
@@ -71,12 +79,19 @@ lib/
 
 ## Data Storage
 
-- **Contact form submissions** use an in-memory store (`lib/contactStore.ts`) and reset on server restart.
-- **Projects and contact info** are persisted to JSON files under `data/` (`data/projects.json`, `data/contact.json`) via `lib/db.ts`, so admin edits survive restarts. These files are created automatically from seed defaults on first read and are git-ignored.
-- **Uploaded images** are saved to `public/uploads/` (git-ignored) and referenced by public path.
+All admin-managed data (projects, contact info, contact-form submissions) is
+persisted through a single storage abstraction (`lib/store.ts`):
 
-### Production note
-File-based storage works for local/self-hosted (Node) deployments. On serverless hosts with a read-only/ephemeral filesystem (e.g. Vercel), replace the read/write helpers in `lib/db.ts` and the upload route with a real database + object storage (e.g. S3).
+- **Production (Vercel):** **Vercel KV** for JSON documents (`projects`, `contact`, `submissions`) and **Vercel Blob** for uploaded images. Used automatically when the KV/Blob env vars are present.
+- **Local development:** JSON files under `data/` and images under `public/uploads/` (both git-ignored). No external services required.
+
+Data is **seeded automatically** with the current website content (7 default projects + contact info) the first time each key is read on an empty store. You can also seed/reset explicitly via the admin seed endpoint (see below).
+
+### Seeding
+- `POST /api/admin/seed` — fills any empty keys with the default content (idempotent).
+- `POST /api/admin/seed?force=1` — overwrites `projects` and `contact` with the defaults.
+
+Both require an authenticated admin session.
 
 ## API Endpoints
 
@@ -86,4 +101,5 @@ File-based storage works for local/self-hosted (Node) deployments. On serverless
 | POST/PUT/DELETE | `/api/projects` | admin | Create / edit / delete a project |
 | GET | `/api/contact-info` | public | Get contact info (website) |
 | PUT | `/api/contact-info` | admin | Update contact info |
-| POST | `/api/admin/upload` | admin | Upload a project image |
+| POST | `/api/admin/upload` | admin | Upload a project image (Blob/local) |
+| POST | `/api/admin/seed` | admin | Seed/reset default content |

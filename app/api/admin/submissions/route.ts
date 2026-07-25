@@ -17,8 +17,8 @@ export async function GET(request: NextRequest) {
       )
     }
     
-    const submissions = getAllSubmissions()
-    const stats = getSubmissionStats()
+    const submissions = await getAllSubmissions()
+    const stats = await getSubmissionStats()
 
     return NextResponse.json({
       submissions,
@@ -51,7 +51,7 @@ export async function PATCH(request: NextRequest) {
       )
     }
 
-    const success = updateSubmissionStatus(id, status)
+    const success = await updateSubmissionStatus(id, status)
 
     if (success) {
       return NextResponse.json({ 
@@ -91,7 +91,7 @@ export async function DELETE(request: NextRequest) {
       )
     }
 
-    const success = deleteSubmission(id)
+    const success = await deleteSubmission(id)
 
     if (success) {
       return NextResponse.json({ 

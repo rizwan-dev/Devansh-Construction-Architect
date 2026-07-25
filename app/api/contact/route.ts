@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Add submission to store
-    const submission = addContactSubmission({
+    const submission = await addContactSubmission({
       name: name.trim(),
       email: email.trim().toLowerCase(),
       phone: phone.trim(),
