@@ -47,7 +47,10 @@ export default function ContactPage() {
       title: 'Visit Us',
       description: 'Come to our office',
       value: contact.address,
-      action: '#',
+      // Opens directions to the office rather than doing nothing.
+      action: `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(
+        contact.address
+      )}`,
       color: 'bg-red-100 text-red-600'
     },
     {
@@ -244,10 +247,29 @@ export default function ContactPage() {
                 <Clock className="w-6 h-6 text-primary-600" />
                 <h4 className="font-semibold text-primary-800">Emergency Support</h4>
               </div>
-              <p className="text-primary-700 text-sm leading-relaxed">
-                For urgent matters outside working hours, please use the contact button above. 
-                We provide emergency support for critical construction issues.
+              <p className="text-primary-700 text-sm leading-relaxed mb-4">
+                We provide emergency support for critical construction issues. For urgent matters
+                outside working hours, call or message us directly and we will respond as soon as
+                we can.
               </p>
+              <div className="flex flex-col sm:flex-row gap-3">
+                <a
+                  href={`tel:${contact.phone}`}
+                  className="inline-flex items-center justify-center gap-2 bg-primary-600 hover:bg-primary-700 text-white font-semibold px-5 py-2.5 rounded-lg transition-colors duration-200 text-sm"
+                >
+                  <Phone className="w-4 h-4" />
+                  <span>Call {contact.phone}</span>
+                </a>
+                <a
+                  href={`https://wa.me/${contact.whatsapp}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center gap-2 bg-white border border-primary-300 hover:border-primary-500 text-primary-700 font-semibold px-5 py-2.5 rounded-lg transition-colors duration-200 text-sm"
+                >
+                  <MessageCircle className="w-4 h-4" />
+                  <span>WhatsApp Us</span>
+                </a>
+              </div>
             </motion.div>
           </div>
         </div>

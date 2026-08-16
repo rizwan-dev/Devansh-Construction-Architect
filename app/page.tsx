@@ -29,18 +29,21 @@ export default function HomePage() {
     {
       icon: PenTool,
       title: 'Architectural Design',
+      href: '/services/architectural-design',
       description: 'Innovative architectural designs with 3D visualizations, detailed drawings, and Vastu consultation for your dream projects.',
       features: ['3D Design & Visualization', 'Vastu Consultation', 'PMC Sanction Drawings', 'Renovation Plans']
     },
     {
       icon: Building2,
       title: 'Construction Services',
+      href: '/services/civil-construction',
       description: 'Complete construction solutions from planning to execution with quality materials and skilled craftsmanship.',
       features: ['Civil Construction', 'MEP Work', 'Exterior Landscaping', 'Lock & Key Projects']
     },
     {
       icon: Home,
       title: 'Project Management',
+      href: '/services/lock-and-key-projects',
       description: 'Professional project management services ensuring timely delivery and quality control throughout the construction process.',
       features: ['Cost Estimation', 'Timeline Scheduling', 'Quality Control', 'Regular Updates']
     }
@@ -94,6 +97,7 @@ export default function HomePage() {
                 title={service.title}
                 description={service.description}
                 features={service.features}
+                href={service.href}
                 index={index}
               />
             ))}

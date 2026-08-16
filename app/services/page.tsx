@@ -37,36 +37,42 @@ export default function ServicesPage() {
     {
       icon: PenTool,
       title: 'Conceptual Design',
+      href: '/services/architectural-design',
       description: 'Initial layouts, sketches, and ideas based on client needs and requirements. We create innovative concepts that align with your vision and budget.',
       features: ['Site Analysis', 'Initial Sketches', 'Concept Development', 'Client Presentations']
     },
     {
       icon: Map,
       title: 'Detailed Drawings & 3D Designs',
+      href: '/services/3d-visualization',
       description: 'Comprehensive floor plans, elevations, sections, and 3D visualizations that bring your project to life with accurate technical details.',
       features: ['Floor Plans', 'Elevations & Sections', '3D Visualizations', 'Technical Drawings']
     },
     {
       icon: Users,
       title: 'Vastu Consultation',
+      href: '/services/vastu-consultation',
       description: 'Expert Vastu guidance to ensure positive energy flow and harmony in your living or working spaces according to ancient principles.',
       features: ['Site Analysis', 'Layout Planning', 'Remedial Measures', 'Energy Optimization']
     },
     {
       icon: Palette,
       title: 'Renovation & Remodeling Plans',
+      href: '/services/renovation-remodeling',
       description: 'Professional redesigning of existing spaces to enhance functionality, aesthetics, and value while preserving structural integrity.',
       features: ['Space Planning', 'Design Optimization', 'Material Selection', 'Timeline Planning']
     },
     {
       icon: Building2,
       title: 'Architectural Planning',
+      href: '/services/architectural-design',
       description: 'Complete 2D/3D model design, exterior design, and structural design services for residential and commercial projects.',
       features: ['2D/3D Modeling', 'Exterior Design', 'Structural Design', 'Landscape Planning']
     },
     {
       icon: FileText,
       title: 'PMC, PCMC, PMRDA Sanction Drawings',
+      href: '/services/sanction-drawings',
       description: 'Professional sanction drawings and documentation for PMC, PCMC, and PMRDA approvals ensuring compliance with local regulations.',
       features: ['Regulatory Compliance', 'Documentation', 'Approval Process', 'Liaison Services']
     }
@@ -76,36 +82,42 @@ export default function ServicesPage() {
     {
       icon: FileText,
       title: 'Project Planning & Estimation',
+      href: '/services/project-planning-estimation',
       description: 'Comprehensive cost estimation, BOQ preparation, and timeline scheduling to ensure accurate project planning and budget control.',
       features: ['Cost Estimation', 'BOQ Preparation', 'Timeline Scheduling', 'Budget Planning']
     },
     {
       icon: Building2,
       title: 'Civil Construction',
+      href: '/services/civil-construction',
       description: 'Complete civil construction services including foundations, structure, masonry, plastering, flooring, and finishing work.',
       features: ['Foundation Work', 'Structural Construction', 'Masonry & Plastering', 'Flooring & Finishing']
     },
     {
       icon: Zap,
       title: 'MEP Work',
+      href: '/services/mep-work',
       description: 'Professional Mechanical, Electrical, and Plumbing installation services ensuring efficient and safe building systems.',
       features: ['Electrical Systems', 'Plumbing Installation', 'HVAC Systems', 'Fire Safety Systems']
     },
     {
       icon: TreePine,
       title: 'Exterior Work',
+      href: '/services/interior-landscaping',
       description: 'Comprehensive exterior services including landscaping, boundary walls, exterior painting, and waterproofing solutions.',
       features: ['Landscaping', 'Boundary Walls', 'Exterior Painting', 'Waterproofing']
     },
     {
       icon: Lock,
       title: 'Lock & Key Construction',
+      href: '/services/lock-and-key-projects',
       description: 'Complete turnkey construction services where we handle everything from design to final handover, ensuring hassle-free experience.',
       features: ['Turnkey Solutions', 'End-to-End Service', 'Quality Assurance', 'Timely Delivery']
     },
     {
       icon: Wrench,
       title: 'Labor Rate Construction',
+      href: '/services/labour-rate-construction',
       description: 'Flexible labor-only construction services where you provide materials and we provide skilled manpower and project management.',
       features: ['Skilled Labor', 'Project Management', 'Quality Control', 'Flexible Pricing']
     }
@@ -115,21 +127,25 @@ export default function ServicesPage() {
     {
       icon: FileText,
       title: 'Demarcation (Mojni)',
+      href: '/services/demarcation-mojni',
       description: 'Professional land demarcation and survey services for accurate property boundaries and legal compliance.'
     },
     {
       icon: FileText,
       title: 'Tax NOC & Clearances',
+      href: '/services/noc-liaisoning',
       description: 'Assistance with various NOC requirements including tax clearances and regulatory approvals.'
     },
     {
       icon: FileText,
       title: 'Airforce NOC',
+      href: '/services/airforce-noc',
       description: 'Specialized services for obtaining Airforce NOC and compliance with aviation zone regulations.'
     },
     {
       icon: Users,
       title: 'PMC, PCMC, PMRDA Liaisoning',
+      href: '/services/noc-liaisoning',
       description: 'Expert liaisoning services for PMC, PCMC, and PMRDA project approvals and regulatory compliance.'
     }
   ]
@@ -262,6 +278,7 @@ export default function ServicesPage() {
                 title={service.title}
                 description={service.description}
                 features={service.features}
+                href={service.href}
                 index={index}
               />
             ))}
@@ -287,6 +304,7 @@ export default function ServicesPage() {
                 title={service.title}
                 description={service.description}
                 features={service.features}
+                href={service.href}
                 index={index}
               />
             ))}
@@ -308,7 +326,7 @@ export default function ServicesPage() {
             {additionalServices.map((service, index) => (
               <motion.a
                 key={service.title}
-                href="/contact"
+                href={service.href}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 whileHover={{ 

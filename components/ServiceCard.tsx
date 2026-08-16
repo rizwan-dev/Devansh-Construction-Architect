@@ -9,12 +9,21 @@ interface ServiceCardProps {
   description: string
   features?: string[]
   index?: number
+  /** Where the card links to — normally the matching /services/<slug> page. */
+  href?: string
 }
 
-const ServiceCard = ({ icon: Icon, title, description, features = [], index = 0 }: ServiceCardProps) => {
+const ServiceCard = ({
+  icon: Icon,
+  title,
+  description,
+  features = [],
+  index = 0,
+  href = '/contact',
+}: ServiceCardProps) => {
   return (
     <motion.a
-      href="/contact"
+      href={href}
       initial={{ opacity: 0, y: 50 }}
       whileInView={{ opacity: 1, y: 0 }}
       whileHover={{ 
