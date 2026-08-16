@@ -95,24 +95,26 @@ const Header = () => {
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: 8 }}
                         transition={{ duration: 0.15 }}
-                        className="absolute left-1/2 -translate-x-1/2 top-full pt-4 w-72"
+                        className="absolute left-1/2 -translate-x-1/2 top-full pt-4 w-[34rem]"
                       >
-                        <div className="bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden py-2">
-                          {services.map((service) => (
-                            <Link
-                              key={service.slug}
-                              href={`/services/${service.slug}`}
-                              onClick={() => setIsServicesOpen(false)}
-                              className="block px-5 py-2.5 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary-600 transition-colors duration-150"
-                            >
-                              {service.name}
-                            </Link>
-                          ))}
+                        <div className="bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden p-3">
+                          <div className="grid grid-cols-2 gap-x-2">
+                            {services.map((service) => (
+                              <Link
+                                key={service.slug}
+                                href={`/services/${service.slug}`}
+                                onClick={() => setIsServicesOpen(false)}
+                                className="block px-4 py-2.5 rounded-lg text-sm text-gray-700 hover:bg-primary-50 hover:text-primary-600 transition-colors duration-150"
+                              >
+                                {service.name}
+                              </Link>
+                            ))}
+                          </div>
                           <div className="border-t border-gray-100 mt-2 pt-2">
                             <Link
                               href="/services"
                               onClick={() => setIsServicesOpen(false)}
-                              className="block px-5 py-2.5 text-sm font-semibold text-primary-600 hover:bg-primary-50 transition-colors duration-150"
+                              className="block px-4 py-2.5 text-sm font-semibold text-primary-600 hover:bg-primary-50 rounded-lg transition-colors duration-150"
                             >
                               View all services →
                             </Link>
