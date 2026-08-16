@@ -8,7 +8,7 @@ import type { ContactInfo } from '@/lib/types'
 const FALLBACK: ContactInfo = {
   phone: '7249400319',
   whatsapp: '917249400319',
-  email: 'Devanshconstro@gmail.com',
+  email: 'devanshconstro@gmail.com',
   address: 'Office No.09,C-Wing,Yogin Belva,Santnagar,Lohegaon,Pune-411047',
   addressShort: 'Lohegaon, Pune-411047',
   mapEmbedUrl:

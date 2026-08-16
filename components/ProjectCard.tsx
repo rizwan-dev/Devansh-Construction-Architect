@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion'
 import Image from 'next/image'
+import Link from 'next/link'
 
 interface ProjectCardProps {
   title: string
@@ -42,11 +43,14 @@ const ProjectCard = ({ title, description, image, category, index = 0 }: Project
           </span>
         </div>
 
-        {/* View Button */}
+        {/* Enquiry Button */}
         <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-          <button className="bg-white text-primary-600 px-6 py-3 rounded-lg font-semibold hover:bg-primary-50 transition-colors duration-200">
-            View Details
-          </button>
+          <Link
+            href={`/contact?project=${encodeURIComponent(title)}`}
+            className="bg-white text-primary-600 px-6 py-3 rounded-lg font-semibold hover:bg-primary-50 transition-colors duration-200"
+          >
+            Enquire Now
+          </Link>
         </div>
       </div>
 

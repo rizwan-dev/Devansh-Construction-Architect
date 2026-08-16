@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion'
 import { ArrowRight, Phone, CheckCircle } from 'lucide-react'
 import RippleButton from './RippleButton'
+import { useContactInfo } from '@/lib/useContactInfo'
 
 interface HeroProps {
   title: string
@@ -23,6 +24,8 @@ const Hero = ({
   backgroundImage = '/api/placeholder/1200/600',
   showStats = false 
 }: HeroProps) => {
+  const contact = useContactInfo()
+
   const stats = [
     { label: 'Projects Completed', value: '150+' },
     { label: 'Happy Clients', value: '150+' },
@@ -118,7 +121,7 @@ const Hero = ({
             className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12"
           >
             <a
-              href="tel:+917249400319"
+              href={`tel:${contact.phone}`}
               className="group bg-primary-600 hover:bg-primary-700 text-white font-semibold px-8 py-4 rounded-lg transition-all duration-300 flex items-center space-x-2"
             >
               <Phone className="w-5 h-5 group-hover:scale-110 transition-transform duration-300" />

@@ -1,11 +1,11 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import Link from 'next/link'
 import { motion } from 'framer-motion'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import SectionTitle from '@/components/SectionTitle'
-import ProjectCard from '@/components/ProjectCard'
 import type { Project } from '@/lib/types'
 import { 
   Building2, 
@@ -171,12 +171,15 @@ export default function ProjectsPage() {
                       </span>
                     </div>
 
-                    {/* View Button */}
+                    {/* Enquiry Button */}
                     <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                      <button className="bg-white text-primary-600 px-6 py-3 rounded-lg font-semibold hover:bg-primary-50 transition-colors duration-200 flex items-center space-x-2">
+                      <Link
+                        href={`/contact?project=${encodeURIComponent(project.title)}`}
+                        className="bg-white text-primary-600 px-6 py-3 rounded-lg font-semibold hover:bg-primary-50 transition-colors duration-200 flex items-center space-x-2"
+                      >
                         <Eye className="w-4 h-4" />
-                        <span>View Details</span>
-                      </button>
+                        <span>Enquire Now</span>
+                      </Link>
                     </div>
                   </div>
 

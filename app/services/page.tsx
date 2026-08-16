@@ -6,7 +6,8 @@ import Footer from '@/components/Footer'
 import SectionTitle from '@/components/SectionTitle'
 import ServiceCard from '@/components/ServiceCard'
 import RippleButton from '@/components/RippleButton'
-import { 
+import { useContactInfo } from '@/lib/useContactInfo'
+import {
   PenTool, 
   Building2, 
   Home, 
@@ -26,6 +27,8 @@ import {
 
 
 export default function ServicesPage() {
+  const contact = useContactInfo()
+
   const architecturalServices = [
     {
       icon: PenTool,
@@ -177,7 +180,7 @@ export default function ServicesPage() {
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                 <RippleButton
-                  href="tel:+917249400319"
+                  href={`tel:${contact.phone}`}
                   className="bg-primary-600 hover:bg-primary-700 text-white font-semibold px-8 py-3 rounded-lg"
                 >
                   <Phone className="w-5 h-5" />
@@ -420,7 +423,7 @@ export default function ServicesPage() {
               Contact us today for a free consultation and detailed quote for your architectural and construction needs.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <RippleButton href="tel:+917249400319" className="bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/30 text-white">
+              <RippleButton href={`tel:${contact.phone}`} className="bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/30 text-white">
                 <Phone className="w-5 h-5" />
                 <span>Call Now</span>
               </RippleButton>
