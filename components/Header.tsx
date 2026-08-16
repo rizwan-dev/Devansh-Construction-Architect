@@ -4,11 +4,15 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Menu, X, Phone, MapPin } from 'lucide-react'
+import { Menu, X, Phone, MapPin, ChevronDown } from 'lucide-react'
+import { getAllServices } from '@/lib/services'
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
+  const [isServicesOpen, setIsServicesOpen] = useState(false)
+  const [isMobileServicesOpen, setIsMobileServicesOpen] = useState(false)
+  const services = getAllServices()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -60,16 +64,75 @@ const Header = () => {
 
           {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center space-x-8">
-            {navigation.map((item) => (
-              <Link
-                key={item.name}
-                href={item.href}
-                className="text-gray-700 hover:text-primary-600 font-medium transition-colors duration-200 relative group"
-              >
-                {item.name}
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary-600 transition-all duration-200 group-hover:w-full"></span>
-              </Link>
-            ))}
+            {navigation.map((item) =>
+              item.name === 'Services' ? (
+                // Services gets a dropdown listing every individual service.
+                <div
+                  key={item.name}
+                  className="relative"
+                  onMouseEnter={() => setIsServicesOpen(true)}
+                  onMouseLeave={() => setIsServicesOpen(false)}
+                >
+                  <Link
+                    href={item.href}
+                    className="text-gray-700 hover:text-primary-600 font-medium transition-colors duration-200 relative group flex items-center gap-1"
+                    aria-haspopup="true"
+                    aria-expanded={isServicesOpen}
+                  >
+                    {item.name}
+                    <ChevronDown
+                      className={`w-4 h-4 transition-transform duration-200 ${
+                        isServicesOpen ? 'rotate-180' : ''
+                      }`}
+                    />
+                    <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary-600 transition-all duration-200 group-hover:w-full"></span>
+                  </Link>
+
+                  <AnimatePresence>
+                    {isServicesOpen && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 8 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 8 }}
+                        transition={{ duration: 0.15 }}
+                        className="absolute left-1/2 -translate-x-1/2 top-full pt-4 w-72"
+                      >
+                        <div className="bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden py-2">
+                          {services.map((service) => (
+                            <Link
+                              key={service.slug}
+                              href={`/services/${service.slug}`}
+                              onClick={() => setIsServicesOpen(false)}
+                              className="block px-5 py-2.5 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary-600 transition-colors duration-150"
+                            >
+                              {service.name}
+                            </Link>
+                          ))}
+                          <div className="border-t border-gray-100 mt-2 pt-2">
+                            <Link
+                              href="/services"
+                              onClick={() => setIsServicesOpen(false)}
+                              className="block px-5 py-2.5 text-sm font-semibold text-primary-600 hover:bg-primary-50 transition-colors duration-150"
+                            >
+                              View all services →
+                            </Link>
+                          </div>
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              ) : (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  className="text-gray-700 hover:text-primary-600 font-medium transition-colors duration-200 relative group"
+                >
+                  {item.name}
+                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary-600 transition-all duration-200 group-hover:w-full"></span>
+                </Link>
+              )
+            )}
           </div>
 
           {/* CTA Button */}
@@ -100,16 +163,66 @@ const Header = () => {
           >
             <div className="container-custom py-4">
               <div className="flex flex-col space-y-4">
-                {navigation.map((item) => (
-                  <Link
-                    key={item.name}
-                    href={item.href}
-                    onClick={() => setIsMenuOpen(false)}
-                    className="text-gray-700 hover:text-primary-600 font-medium py-2 transition-colors duration-200"
-                  >
-                    {item.name}
-                  </Link>
-                ))}
+                {navigation.map((item) =>
+                  item.name === 'Services' ? (
+                    <div key={item.name}>
+                      <div className="flex items-center justify-between">
+                        <Link
+                          href={item.href}
+                          onClick={() => setIsMenuOpen(false)}
+                          className="text-gray-700 hover:text-primary-600 font-medium py-2 transition-colors duration-200"
+                        >
+                          {item.name}
+                        </Link>
+                        <button
+                          type="button"
+                          onClick={() => setIsMobileServicesOpen(!isMobileServicesOpen)}
+                          aria-label="Toggle services menu"
+                          aria-expanded={isMobileServicesOpen}
+                          className="p-2 text-gray-600 hover:text-primary-600"
+                        >
+                          <ChevronDown
+                            className={`w-5 h-5 transition-transform duration-200 ${
+                              isMobileServicesOpen ? 'rotate-180' : ''
+                            }`}
+                          />
+                        </button>
+                      </div>
+                      <AnimatePresence>
+                        {isMobileServicesOpen && (
+                          <motion.div
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: 'auto' }}
+                            exit={{ opacity: 0, height: 0 }}
+                            className="overflow-hidden"
+                          >
+                            <div className="pl-4 border-l-2 border-primary-100 flex flex-col space-y-1 mt-1 mb-2">
+                              {services.map((service) => (
+                                <Link
+                                  key={service.slug}
+                                  href={`/services/${service.slug}`}
+                                  onClick={() => setIsMenuOpen(false)}
+                                  className="text-sm text-gray-600 hover:text-primary-600 py-2 transition-colors duration-200"
+                                >
+                                  {service.name}
+                                </Link>
+                              ))}
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
+                  ) : (
+                    <Link
+                      key={item.name}
+                      href={item.href}
+                      onClick={() => setIsMenuOpen(false)}
+                      className="text-gray-700 hover:text-primary-600 font-medium py-2 transition-colors duration-200"
+                    >
+                      {item.name}
+                    </Link>
+                  )
+                )}
                 <Link
                   href="/contact"
                   onClick={() => setIsMenuOpen(false)}

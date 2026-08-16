@@ -6,7 +6,10 @@ import Footer from '@/components/Footer'
 import SectionTitle from '@/components/SectionTitle'
 import ServiceCard from '@/components/ServiceCard'
 import RippleButton from '@/components/RippleButton'
+import Link from 'next/link'
+import Image from 'next/image'
 import { useContactInfo } from '@/lib/useContactInfo'
+import { getAllServices } from '@/lib/services'
 import {
   PenTool, 
   Building2, 
@@ -28,6 +31,7 @@ import {
 
 export default function ServicesPage() {
   const contact = useContactInfo()
+  const allServices = getAllServices()
 
   const architecturalServices = [
     {
@@ -188,6 +192,54 @@ export default function ServicesPage() {
                 </RippleButton>
               </div>
             </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* Explore each service — links to the dedicated service pages */}
+      <section className="section-padding bg-gray-50">
+        <div className="container-custom">
+          <SectionTitle
+            title="Explore Our Services"
+            subtitle="What We Offer"
+            description="Each service has its own page with what's included, how the process works and answers to common questions."
+            center={true}
+          />
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-16">
+            {allServices.map((service, index) => (
+              <motion.div
+                key={service.slug}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: Math.min(index * 0.05, 0.3) }}
+                viewport={{ once: true }}
+              >
+                <Link
+                  href={`/services/${service.slug}`}
+                  className="group block bg-white rounded-xl shadow-sm hover:shadow-xl border border-gray-100 hover:border-primary-200 transition-all duration-300 overflow-hidden h-full"
+                >
+                  <div className="relative h-44">
+                    <Image
+                      src={service.image}
+                      alt={service.imageAlt}
+                      fill
+                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                  </div>
+                  <div className="p-6">
+                    <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-primary-600 transition-colors duration-300">
+                      {service.name}
+                    </h3>
+                    <p className="text-gray-600 text-sm leading-relaxed mb-4">{service.tagline}</p>
+                    <span className="inline-flex items-center gap-1.5 text-primary-600 font-semibold text-sm">
+                      Learn more
+                      <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200" />
+                    </span>
+                  </div>
+                </Link>
+              </motion.div>
+            ))}
           </div>
         </div>
       </section>

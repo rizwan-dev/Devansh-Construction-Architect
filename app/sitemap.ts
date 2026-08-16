@@ -1,6 +1,7 @@
 import type { MetadataRoute } from 'next'
 import { SITE_URL } from '@/lib/seo'
 import { getAllPosts } from '@/lib/blog'
+import { getAllServices } from '@/lib/services'
 
 export const dynamic = 'force-dynamic'
 
@@ -34,5 +35,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.7,
   }))
 
-  return [...staticEntries, ...postEntries]
+  const serviceEntries: MetadataRoute.Sitemap = getAllServices().map((service) => ({
+    url: new URL(`/services/${service.slug}`, SITE_URL).toString(),
+    lastModified,
+    changeFrequency: 'monthly',
+    priority: 0.85,
+  }))
+
+  return [...staticEntries, ...serviceEntries, ...postEntries]
 }

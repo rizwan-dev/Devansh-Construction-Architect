@@ -5,17 +5,11 @@ import { motion } from 'framer-motion'
 import RippleButton from '@/components/RippleButton'
 import { Phone, Mail, MapPin, MessageCircle } from 'lucide-react'
 import { useContactInfo } from '@/lib/useContactInfo'
+import { getAllServices } from '@/lib/services'
 
 const Footer = () => {
   const contact = useContactInfo()
-  const services = [
-    'Architectural Design',
-    '3D Visualization',
-    'PMC Sanction Drawings',
-    'Vastu Consultation',
-    'Civil Construction',
-    'Lock & Key Projects'
-  ]
+  const services = getAllServices().map((s) => ({ name: s.name, href: `/services/${s.slug}` }))
 
   const quickLinks = [
     { name: 'Home', href: '/' },
@@ -137,12 +131,12 @@ const Footer = () => {
               className="space-y-2"
             >
               {services.map((service) => (
-                <li key={service}>
+                <li key={service.href}>
                   <Link
-                    href="/services"
+                    href={service.href}
                     className="text-gray-400 hover:text-primary-400 transition-colors duration-200"
                   >
-                    {service}
+                    {service.name}
                   </Link>
                 </li>
               ))}
