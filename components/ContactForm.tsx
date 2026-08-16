@@ -1,10 +1,12 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Send, Phone, Mail, MapPin, Clock } from 'lucide-react'
+import { useContactInfo } from '@/lib/useContactInfo'
 
 const ContactForm = () => {
+  const contact = useContactInfo()
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -15,6 +17,19 @@ const ContactForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [submitError, setSubmitError] = useState('')
+
+  // Prefill the subject when arriving from a project card (/contact?project=...).
+  // Read from window rather than useSearchParams so the page stays statically
+  // prerenderable without an extra Suspense boundary.
+  useEffect(() => {
+    const project = new URLSearchParams(window.location.search).get('project')
+    if (project) {
+      setFormData((prev) => ({
+        ...prev,
+        subject: prev.subject || `Enquiry about ${project}`,
+      }))
+    }
+  }, [])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({
@@ -60,19 +75,27 @@ const ContactForm = () => {
     {
       icon: Phone,
       title: 'Phone',
-      value: '7249400319',
-      href: 'tel:7249400319'
+      value: contact.phone,
+      href: `tel:${contact.phone}`
+    },
+    {
+      icon: Mail,
+      title: 'Email',
+      value: contact.email,
+      href: `mailto:${contact.email}`
     },
     {
       icon: MapPin,
       title: 'Address',
-      value: 'Office No.09,C-Wing,Yogin Belva,Santnagar,Lohegaon,Pune-411047',
+      value: contact.address,
       href: '#'
     },
     {
       icon: Clock,
       title: 'Working Hours',
-      value: 'Mon - Sat: 9:00 AM - 6:00 PM',
+      value: contact.workingHours
+        .map((w) => `${w.day}: ${w.hours}`)
+        .join(' · '),
       href: '#'
     }
   ]
@@ -267,8 +290,8 @@ const ContactForm = () => {
           >
             <h4 className="font-semibold text-primary-800 mb-2">Quick Response Guarantee</h4>
             <p className="text-primary-700 text-sm leading-relaxed">
-              We respond to all inquiries within 24 hours. For urgent matters, 
-              please call us directly at 7249400319.
+              We respond to all inquiries within 24 hours. For urgent matters,
+              please call us directly at {contact.phone}.
             </p>
           </motion.div>
         </motion.div>

@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import RippleButton from '@/components/RippleButton'
-import { Phone, Mail, MapPin } from 'lucide-react'
+import { Phone, Mail, MapPin, MessageCircle } from 'lucide-react'
 import { useContactInfo } from '@/lib/useContactInfo'
 
 const Footer = () => {
@@ -137,32 +137,53 @@ const Footer = () => {
             >
               {services.map((service) => (
                 <li key={service}>
-                  <span className="text-gray-400 hover:text-primary-400 transition-colors duration-200 cursor-pointer">
+                  <Link
+                    href="/services"
+                    className="text-gray-400 hover:text-primary-400 transition-colors duration-200"
+                  >
                     {service}
-                  </span>
+                  </Link>
                 </li>
               ))}
             </motion.ul>
           </div>
 
-          {/* Newsletter */}
+          {/* Get in Touch */}
           <div>
+            <motion.h4
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              viewport={{ once: true }}
+              className="text-lg font-semibold mb-4"
+            >
+              Get in Touch
+            </motion.h4>
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
               viewport={{ once: true }}
+              className="space-y-3"
             >
-              <div className="flex">
-                <input
-                  type="email"
-                  placeholder="Your email"
-                  className="flex-1 px-3 py-2 bg-gray-800 border border-gray-700 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-primary-500 text-sm"
-                />
-                <button className="px-4 py-2 bg-primary-600 hover:bg-primary-700 rounded-r-lg transition-colors duration-200 text-sm">
-                  Subscribe
-                </button>
-              </div>
+              <p className="text-gray-400 leading-relaxed">
+                Have a project in mind? Get a free consultation with our team.
+              </p>
+              <Link
+                href="/contact"
+                className="inline-flex items-center justify-center w-full bg-primary-600 hover:bg-primary-700 text-white font-semibold px-4 py-2 rounded-lg transition-colors duration-200"
+              >
+                Request a Consultation
+              </Link>
+              <a
+                href={`https://wa.me/${contact.whatsapp}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center space-x-3 text-gray-400 hover:text-primary-400 transition-colors duration-200"
+              >
+                <MessageCircle className="w-5 h-5 text-primary-400 flex-shrink-0" />
+                <span>Chat on WhatsApp</span>
+              </a>
             </motion.div>
           </div>
         </div>
@@ -178,7 +199,20 @@ const Footer = () => {
             viewport={{ once: true }}
             className="flex flex-col md:flex-row items-center justify-between text-sm text-gray-400"
           >
-            <p>&copy; 2024 Devansh Constro & Architect. All rights reserved.</p>
+            <div className="text-center md:text-left">
+              <p>&copy; {new Date().getFullYear()} Devansh Constro & Architect. All rights reserved.</p>
+              <p className="mt-1 text-xs text-gray-500">
+                Developed by{' '}
+                <a
+                  href="https://riztechacademy.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gray-400 hover:text-primary-400 transition-colors duration-200"
+                >
+                  RizTech Academy
+                </a>
+              </p>
+            </div>
             <div className="flex space-x-6 mt-4 md:mt-0">
               <Link href="/privacy" className="hover:text-primary-400 transition-colors duration-200">
                 Privacy Policy
