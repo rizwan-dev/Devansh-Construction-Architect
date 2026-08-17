@@ -144,10 +144,14 @@ const Header = () => {
             </Link>
           </div>
 
-          {/* Mobile menu button */}
+          {/* Mobile menu button. The negative margin lets the button's own
+              padding overlap the container gutter, so the icon lines up with
+              the container edge instead of sitting further in than the logo. */}
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="lg:hidden p-2 rounded-md text-gray-700 hover:text-primary-600 hover:bg-gray-100"
+            aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
+            aria-expanded={isMenuOpen}
+            className="lg:hidden -mr-2 p-2 rounded-md text-gray-700 hover:text-primary-600 hover:bg-gray-100"
           >
             {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>

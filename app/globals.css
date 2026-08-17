@@ -8,9 +8,19 @@
   html {
     font-family: 'Inter', system-ui, sans-serif;
   }
-  
+
   body {
     @apply text-gray-900;
+  }
+
+  /* Several sections animate in from the side (framer-motion `x: -30` /
+     `x: 30`). Before they enter the viewport they sit translated outside it,
+     which produced a real horizontal scroll on mobile. Clip it at the root.
+     Safe here because the header is position: fixed, not sticky. */
+  html,
+  body {
+    overflow-x: hidden;
+    max-width: 100%;
   }
 }
 
@@ -23,12 +33,15 @@
     @apply bg-white hover:bg-gray-50 text-primary-600 font-semibold py-3 px-6 rounded-lg border-2 border-primary-600 transition-colors duration-200;
   }
   
+  /* Vertical rhythm only. Horizontal gutters live on .container-custom so
+     that content never touches the screen edge, including in the header and
+     in hero sections that don't use .section-padding. */
   .section-padding {
-    @apply py-16 px-4 sm:px-6 lg:px-8;
+    @apply py-16;
   }
-  
+
   .container-custom {
-    @apply max-w-7xl mx-auto;
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
   }
 }
 
