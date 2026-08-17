@@ -4,7 +4,7 @@ import { SITE_URL, SITE_NAME, OG_IMAGE } from '@/lib/seo'
 
 const TITLE = 'Architects & Construction Company in Pune | Devansh Constro & Architect'
 const DESCRIPTION =
-  'Devansh Constro & Architect is an architecture and construction firm in Lohegaon, Pune. Architectural design, 3D visualisation, PMC/PCMC/PMRDA sanction drawings, Vastu consultation, civil construction and turnkey lock & key projects.'
+  'Architecture and construction firm in Lohegaon, Pune. Architectural design, 3D visualisation, sanction drawings, Vastu consultation and turnkey builds.'
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),

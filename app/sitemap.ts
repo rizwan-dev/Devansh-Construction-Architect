@@ -2,10 +2,11 @@ import type { MetadataRoute } from 'next'
 import { SITE_URL } from '@/lib/seo'
 import { getAllPosts } from '@/lib/blog'
 import { getAllServices } from '@/lib/services'
+import { getAllProjects } from '@/lib/db'
 
 export const dynamic = 'force-dynamic'
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const lastModified = new Date()
 
   const routes: { path: string; priority: number; changeFrequency: 'weekly' | 'monthly' | 'yearly' }[] = [
@@ -42,5 +43,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.85,
   }))
 
-  return [...staticEntries, ...serviceEntries, ...postEntries]
+  // Individual project pages, driven by whatever is currently in the store.
+  const projects = await getAllProjects()
+  const projectEntries: MetadataRoute.Sitemap = projects.map((project) => ({
+    url: new URL(`/projects/${project.id}`, SITE_URL).toString(),
+    lastModified,
+    changeFrequency: 'monthly',
+    priority: 0.6,
+  }))
+
+  return [...staticEntries, ...serviceEntries, ...postEntries, ...projectEntries]
 }

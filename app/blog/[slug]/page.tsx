@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
@@ -188,12 +189,16 @@ export default function BlogPostPage({ params }: Props) {
       {/* Cover image */}
       <div className="container-custom">
         <div className="max-w-4xl mx-auto -mt-2 mb-10">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={post.image}
-            alt={post.imageAlt}
-            className="w-full h-64 md:h-96 object-cover rounded-2xl shadow-lg"
-          />
+          <div className="relative w-full h-64 md:h-96 rounded-2xl overflow-hidden shadow-lg">
+            <Image
+              src={post.image}
+              alt={post.imageAlt}
+              fill
+              priority
+              sizes="(max-width: 1024px) 100vw, 1024px"
+              className="object-cover"
+            />
+          </div>
         </div>
       </div>
 
@@ -253,11 +258,12 @@ export default function BlogPostPage({ params }: Props) {
                     className="group bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100"
                   >
                     <Link href={`/blog/${r.slug}`} className="block relative h-44 overflow-hidden">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
+                      <Image
                         src={r.image}
                         alt={r.imageAlt}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        fill
+                        sizes="(max-width: 768px) 100vw, 50vw"
+                        className="object-cover group-hover:scale-105 transition-transform duration-500"
                       />
                     </Link>
                     <div className="p-6">

@@ -3,7 +3,7 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'Contact Us — Free Consultation in Pune',
   description:
-    'Contact Devansh Constro & Architect in Lohegaon, Pune for a free consultation on your architectural design or construction project. Call, WhatsApp, email or visit our office.',
+    'Contact Devansh Constro & Architect in Lohegaon, Pune for a free consultation on your design or construction project. Call, WhatsApp or email us.',
   alternates: { canonical: '/contact' },
   openGraph: {
     title: 'Contact Devansh Constro & Architect',
