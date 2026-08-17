@@ -164,17 +164,55 @@ export default function RootLayout({
       </head>
         <body className="min-h-screen bg-white">
           {children}
+          {/* Safety net for scroll-reveal animations.
+
+              Sections animate in with framer-motion `whileInView`, which starts
+              them at opacity 0. If the IntersectionObserver never fires — JS
+              erroring, an element already in view at load, or a browser that
+              throttles animation frames — that content would stay invisible.
+
+              A one-shot 100ms timer used to do this, which was too early to
+              help and clobbered transforms mid-animation. This instead sweeps
+              periodically for a short window and only reveals elements that are
+              actually on screen and still fully transparent, so it never
+              interrupts an animation that is running normally. */}
           <script
             dangerouslySetInnerHTML={{
               __html: `
-                // Fix for Framer Motion elements not showing
-                setTimeout(() => {
-                  const hiddenElements = document.querySelectorAll('[style*="opacity:0"]');
-                  hiddenElements.forEach(el => {
-                    el.style.opacity = '1';
-                    el.style.transform = 'none';
-                  });
-                }, 100);
+                (function () {
+                  var reduce = window.matchMedia &&
+                    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+                  function reveal(force) {
+                    var els = document.querySelectorAll('[style*="opacity:0"], [style*="opacity: 0"]');
+                    for (var i = 0; i < els.length; i++) {
+                      var el = els[i];
+                      var r = el.getBoundingClientRect();
+                      var onScreen = r.top < window.innerHeight && r.bottom > 0;
+                      if (force || onScreen) {
+                        el.style.opacity = '1';
+                        el.style.transform = 'none';
+                      }
+                    }
+                  }
+
+                  // Users who prefer reduced motion get everything immediately.
+                  if (reduce) {
+                    reveal(true);
+                    document.addEventListener('DOMContentLoaded', function () { reveal(true); });
+                    return;
+                  }
+
+                  // Otherwise let the animations play, and only rescue anything
+                  // still stuck on screen. Checks taper off after a few seconds.
+                  var checks = 0;
+                  var timer = setInterval(function () {
+                    reveal(false);
+                    if (++checks > 12) clearInterval(timer);
+                  }, 400);
+
+                  window.addEventListener('pageshow', function () { reveal(false); });
+                })();
               `,
             }}
           />
