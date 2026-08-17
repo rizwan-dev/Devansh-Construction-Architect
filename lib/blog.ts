@@ -13,6 +13,9 @@ export interface BlogPost {
   slug: string
   title: string
   excerpt: string
+  /** Search-result description. Kept <=160 chars; the excerpt is the longer
+      on-page intro and is too long for a meta description. */
+  metaDescription: string
   date: string // ISO date
   readTime: string
   category: string
@@ -25,6 +28,8 @@ export interface BlogPost {
 export const BLOG_POSTS: BlogPost[] = [
   {
     slug: 'building-a-house-in-lohegaon-pune-guide',
+    metaDescription:
+      'Building a house in Lohegaon, Pune: plot checks, airport height restrictions, sanction drawings, realistic timelines and what actually drives cost.',
     title: 'Building a House in Lohegaon, Pune: Approvals, Costs and Timelines',
     excerpt:
       'A practical guide to constructing a home in Lohegaon — from checking your plot and airport height restrictions to sanction drawings, realistic timelines and the cost factors that actually matter.',
@@ -142,6 +147,8 @@ export const BLOG_POSTS: BlogPost[] = [
   },
   {
     slug: 'commercial-construction-kharadi-pune-guide',
+    metaDescription:
+      'Commercial construction in Kharadi, Pune: designing for your occupier, MEP planning, fire and parking compliance, and building in a live IT corridor.',
     title: 'Commercial Construction in Kharadi: What Businesses Should Plan For',
     excerpt:
       'Kharadi is Pune’s busiest commercial corridor. Here is what actually determines the success of an office, retail or mixed-use build here — from fit-out standards and MEP planning to fire compliance and phasing work around a live IT belt.',
@@ -257,6 +264,8 @@ export const BLOG_POSTS: BlogPost[] = [
   },
   {
     slug: 'lohegaon-vs-kharadi-where-to-build-pune',
+    metaDescription:
+      'Lohegaon or Kharadi? Comparing plot availability, connectivity, what each area suits and the construction constraints unique to both.',
     title: 'Lohegaon or Kharadi: Choosing the Right Area for Your Pune Project',
     excerpt:
       'Two of east Pune’s fastest-growing areas, with very different characters. A side-by-side look at plot availability, connectivity, what each area suits, and the construction constraints unique to both.',

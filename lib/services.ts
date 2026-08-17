@@ -27,7 +27,7 @@ export const SERVICES: ServiceDetail[] = [
     title: 'Architectural Design Services in Pune',
     metaTitle: 'Architectural Design Services in Pune',
     metaDescription:
-      'Architectural design for homes, apartments and commercial buildings in Pune. Concept planning, elevations, working drawings and Vastu-aware layouts by Devansh Constro & Architect, Lohegaon.',
+      'Architectural design for homes, apartments and commercial buildings in Pune — concept planning, elevations, working drawings and Vastu-aware layouts.',
     tagline:
       'Considered, buildable design — from first concept to the working drawings your site team can actually build from.',
     image: '/services/sahyadri-villa-render.jpeg',
@@ -92,7 +92,7 @@ export const SERVICES: ServiceDetail[] = [
     title: '3D Architectural Visualization & Walkthroughs',
     metaTitle: '3D Architectural Design & Visualization in Pune',
     metaDescription:
-      'Photorealistic 3D elevations, exterior and interior renders and walkthroughs for residential and commercial projects in Pune. See your building before you build it.',
+      'Photorealistic 3D elevations, interior and exterior renders and walkthroughs for projects in Pune. See your building before you build it.',
     tagline: 'See exactly what you are building — before a single brick is laid.',
     image: '/services/apartment-elevation-render.jpeg',
     imageAlt:
@@ -148,7 +148,7 @@ export const SERVICES: ServiceDetail[] = [
     title: 'Sanction Drawings & Building Approvals in Pune',
     metaTitle: 'PMC, PCMC & PMRDA Sanction Drawings in Pune',
     metaDescription:
-      'Preparation and submission of sanction drawings for PMC, PCMC and PMRDA in Pune. Zoning and FSI checks, liaison, NOCs and approval follow-up by Devansh Constro & Architect.',
+      'Sanction drawings for PMC, PCMC and PMRDA in Pune — zoning and FSI checks, submission, NOC coordination and follow-up until approval.',
     tagline: 'Drawings prepared correctly the first time, so your file moves instead of bouncing back.',
     image: '/services/ganesh-kale-elevation.jpeg',
     imageAlt: 'Architectural elevation design prepared for municipal sanction approval, Pune',
@@ -207,7 +207,7 @@ export const SERVICES: ServiceDetail[] = [
     title: 'Vastu Consultation for Homes & Commercial Spaces',
     metaTitle: 'Vastu Consultation for Homes & Offices in Pune',
     metaDescription:
-      'Practical Vastu consultation integrated into architectural planning — orientation, entrance, room placement and layout corrections for homes and commercial spaces in Pune.',
+      'Vastu consultation built into architectural planning in Pune — orientation, entrance, room placement and corrections for existing homes.',
     tagline: 'Vastu handled at the planning stage, where it can be resolved properly.',
     image: '/Manjiri.jpeg',
     imageAlt: 'Vastu-planned residential project with landscaped surroundings in Pune',
@@ -261,7 +261,7 @@ export const SERVICES: ServiceDetail[] = [
     title: 'Civil Construction Contractors in Pune',
     metaTitle: 'Civil Construction Contractors in Pune',
     metaDescription:
-      'End-to-end civil construction in Pune — excavation, RCC structure, masonry, plaster, waterproofing and MEP. Quality materials, supervised execution and transparent billing.',
+      'Civil construction in Pune — excavation, RCC structure, masonry, plaster, waterproofing and MEP, with supervised execution and stage billing.',
     tagline: 'Structure built properly — the part of the project you cannot redo later.',
     image: '/dhanori.jpeg',
     imageAlt: 'Residential tower construction project by Devansh Constro & Architect in Dhanori, Pune',
@@ -387,7 +387,7 @@ export const SERVICES: ServiceDetail[] = [
     title: 'Interior Design & Exterior Landscaping',
     metaTitle: 'Interior Design & Landscaping Services in Pune',
     metaDescription:
-      'Interior design and exterior landscaping for homes and commercial spaces in Pune — space planning, modular kitchens, wardrobes, false ceilings, lighting, paving and garden design.',
+      'Interior design and landscaping in Pune — space planning, modular kitchens, wardrobes, false ceilings, lighting, paving and garden design.',
     tagline: 'The finishing layer that decides how the space actually feels to use.',
     image: '/Junnar.jpeg',
     imageAlt: 'Residential project with landscaped exterior in Pune',
@@ -446,7 +446,7 @@ export const SERVICES: ServiceDetail[] = [
     title: 'Home & Office Renovation and Remodeling in Pune',
     metaTitle: 'Home Renovation & Remodeling Services in Pune',
     metaDescription:
-      'Renovation and remodeling of homes, flats and offices in Pune. Structural assessment, space replanning, kitchen and bathroom remodeling, and finishing — with minimal disruption.',
+      'Renovation and remodeling of homes, flats and offices in Pune — structural assessment, space replanning, kitchens, bathrooms and finishing.',
     tagline: 'Make an existing space work properly again — without rebuilding from scratch.',
     image: '/awhalwadi.jpeg',
     imageAlt: 'Renovated residential building project in Pune',
@@ -517,7 +517,7 @@ export const SERVICES: ServiceDetail[] = [
     title: 'MEP Services — Electrical, Plumbing & HVAC',
     metaTitle: 'MEP Contractors in Pune — Electrical, Plumbing & HVAC',
     metaDescription:
-      'MEP services in Pune for residential and commercial buildings — electrical wiring, plumbing, drainage, HVAC and fire safety systems, designed and installed with proper coordination.',
+      'MEP services in Pune — electrical, plumbing, drainage, HVAC and fire safety systems, designed and installed with proper coordination.',
     tagline: 'The systems behind the walls — where shortcuts cause the most expensive problems.',
     image: '/Kharadi.jpeg',
     imageAlt: 'Commercial building requiring coordinated MEP services in Kharadi, Pune',
@@ -552,7 +552,7 @@ export const SERVICES: ServiceDetail[] = [
     title: 'Labour Rate Construction Contractors in Pune',
     metaTitle: 'Labour Rate Construction Contractors in Pune',
     metaDescription:
-      'Labour-rate (labour contract) construction in Pune — you supply the materials, we provide skilled manpower, supervision and project management, with transparent stage-wise billing.',
+      'Labour-rate construction in Pune — you supply materials, we provide skilled manpower, supervision and project management with staged billing.',
     tagline: 'You buy the materials. We bring the skilled team and the supervision.',
     image: '/dhanori.jpeg',
     imageAlt: 'Residential construction project executed on labour rate contract in Pune',
@@ -621,7 +621,7 @@ export const SERVICES: ServiceDetail[] = [
     title: 'Airforce & AAI Height Clearance NOC in Pune',
     metaTitle: 'Airforce & AAI Height NOC for Pune Airport Zone',
     metaDescription:
-      'Assistance with Airforce and Airports Authority of India height clearance NOC for plots near Pune airport — Lohegaon, Dhanori, Viman Nagar and Vadgaon Sheri. Know your permissible height before you design.',
+      'Airforce and AAI height clearance NOC for plots near Pune airport — Lohegaon, Dhanori and Viman Nagar. Know your permissible height first.',
     tagline: 'Near Pune airport, your permissible height is decided before your design is.',
     image: '/Lohegaon Row House.jpeg',
     imageAlt: 'Residential project in the Lohegaon airport zone requiring height clearance NOC',
@@ -656,7 +656,7 @@ export const SERVICES: ServiceDetail[] = [
     title: 'NOC, Tax Clearance & PMC / PCMC / PMRDA Liaisoning',
     metaTitle: 'NOC & PMC / PCMC / PMRDA Liaisoning Services in Pune',
     metaDescription:
-      'Liaisoning with PMC, PCMC and PMRDA in Pune — tax NOC, clearances, fire NOC coordination, completion and occupancy certificates. We handle the paperwork and the follow-up.',
+      'PMC, PCMC and PMRDA liaisoning in Pune — tax NOC, clearances, fire NOC, completion and occupancy certificates, with follow-up handled.',
     tagline: 'The paperwork and the follow-up, handled by people who do it every week.',
     image: '/Manjiri.jpeg',
     imageAlt: 'Completed residential project in Pune with statutory approvals in place',
