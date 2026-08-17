@@ -6,8 +6,11 @@ import { getAllProjects } from '@/lib/db'
 import { SITE_URL, SITE_NAME } from '@/lib/seo'
 import { ArrowRight } from 'lucide-react'
 
-// Projects live in KV and are edited from the admin, so render on request.
-export const dynamic = 'force-dynamic'
+// Projects are edited from the admin (KV). Cache the rendered page and
+// revalidate every 60s: near-static TTFB for visitors and crawlers, while
+// admin edits still appear within a minute. The /api/projects route stays
+// dynamic, so the admin panel itself always reads live data.
+export const revalidate = 60
 
 export default async function ProjectsPage() {
   const projects = await getAllProjects()
