@@ -9,6 +9,7 @@ import RippleButton from '@/components/RippleButton'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useContactInfo } from '@/lib/useContactInfo'
+import CallButtons from '@/components/CallButtons'
 import { getAllServices } from '@/lib/services'
 import {
   PenTool, 
@@ -199,13 +200,10 @@ export default function ServicesPage() {
                 quality materials, and innovative approaches that exceed your expectations.
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                <RippleButton
-                  href={`tel:${contact.phone}`}
-                  className="bg-primary-600 hover:bg-primary-700 text-white font-semibold px-8 py-3 rounded-lg"
-                >
-                  <Phone className="w-5 h-5" />
-                  <span>Call Now</span>
-                </RippleButton>
+                <CallButtons
+                  phone={contact.phone}
+                  className="bg-primary-600 hover:bg-primary-700 text-white font-semibold px-8 py-3 rounded-lg inline-flex items-center gap-2"
+                />
               </div>
             </motion.div>
           </div>
@@ -493,10 +491,10 @@ export default function ServicesPage() {
               Contact us today for a free consultation and detailed quote for your architectural and construction needs.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <RippleButton href={`tel:${contact.phone}`} className="bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/30 text-white">
-                <Phone className="w-5 h-5" />
-                <span>Call Now</span>
-              </RippleButton>
+              <CallButtons
+                phone={contact.phone}
+                className="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/30 text-white font-semibold px-8 py-4 rounded-lg transition-colors duration-200"
+              />
             </div>
           </motion.div>
         </div>

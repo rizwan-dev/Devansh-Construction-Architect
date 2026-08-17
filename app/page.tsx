@@ -8,6 +8,8 @@ import SectionTitle from '@/components/SectionTitle'
 import ServiceCard from '@/components/ServiceCard'
 import RippleButton from '@/components/RippleButton'
 import { useContactInfo } from '@/lib/useContactInfo'
+import CallButtons from '@/components/CallButtons'
+import { parsePhones, telHref } from '@/lib/phone'
 import { 
   Building2, 
   PenTool, 
@@ -210,13 +212,11 @@ export default function HomePage() {
             </p>
             
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <a
-                href={`tel:${contact.phone}`}
-                className="bg-primary-600 hover:bg-primary-700 text-white font-semibold px-8 py-4 rounded-lg transition-colors duration-200 flex items-center space-x-2"
-              >
-                <Phone className="w-5 h-5" />
-                <span>Get Free Consultation</span>
-              </a>
+              <CallButtons
+                phone={contact.phone}
+                label="Get Free Consultation"
+                className="bg-primary-600 hover:bg-primary-700 text-white font-semibold px-8 py-4 rounded-lg transition-colors duration-200 inline-flex items-center gap-2"
+              />
             </div>
           </motion.div>
         </div>
@@ -226,10 +226,19 @@ export default function HomePage() {
       <section className="bg-primary-600 py-6">
         <div className="container-custom">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center text-white">
-            <a href={`tel:${contact.phone}`} className="flex items-center justify-center space-x-3 hover:bg-primary-700 rounded-lg px-4 py-2 transition-colors duration-200">
-              <Phone className="w-5 h-5" />
-              <div className="font-semibold">Call Us</div>
-            </a>
+            <div className="flex items-center justify-center space-x-3 px-4 py-2">
+              <Phone className="w-5 h-5 flex-shrink-0" />
+              <div>
+                <div className="font-semibold">Call Us</div>
+                <div className="text-sm text-primary-100 flex flex-wrap gap-x-2">
+                  {parsePhones(contact.phone).map((n) => (
+                    <a key={n} href={telHref(n)} className="hover:underline">
+                      {n}
+                    </a>
+                  ))}
+                </div>
+              </div>
+            </div>
             <a href={`mailto:${contact.email}`} className="flex items-center justify-center space-x-3 hover:bg-primary-700 rounded-lg px-4 py-2 transition-colors duration-200">
               <Mail className="w-5 h-5" />
               <div>

@@ -5,6 +5,7 @@ import { motion } from 'framer-motion'
 import RippleButton from '@/components/RippleButton'
 import { Phone, Mail, MapPin, MessageCircle } from 'lucide-react'
 import { useContactInfo } from '@/lib/useContactInfo'
+import CallButtons from '@/components/CallButtons'
 import { getAllServices } from '@/lib/services'
 
 const Footer = () => {
@@ -66,10 +67,12 @@ const Footer = () => {
                 <Phone className="w-5 h-5 text-primary-400" />
                 <span>Call Us</span>
               </div>
-              <RippleButton href={`tel:${contact.phone}`} className="bg-primary-600 hover:bg-primary-700 w-full text-black">
-                <Phone className="w-4 h-4" />
-                <span>Call Now</span>
-              </RippleButton>
+              <CallButtons
+                phone={contact.phone}
+                stack
+                alwaysShowNumber
+                className="inline-flex items-center justify-center gap-2 bg-primary-600 hover:bg-primary-700 text-white font-semibold px-4 py-2 rounded-lg transition-colors duration-200 w-full"
+              />
               <a href={`mailto:${contact.email}`} className="flex items-center space-x-3 hover:text-primary-400 transition-colors duration-200 break-all">
                 <Mail className="w-5 h-5 text-primary-400 flex-shrink-0" />
                 <span>{contact.email}</span>

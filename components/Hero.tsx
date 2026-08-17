@@ -4,6 +4,7 @@ import { motion } from 'framer-motion'
 import { ArrowRight, Phone, CheckCircle } from 'lucide-react'
 import RippleButton from './RippleButton'
 import { useContactInfo } from '@/lib/useContactInfo'
+import CallButtons from '@/components/CallButtons'
 
 interface HeroProps {
   title: string
@@ -120,13 +121,11 @@ const Hero = ({
             transition={{ duration: 0.6, delay: 0.5 }}
             className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12"
           >
-            <a
-              href={`tel:${contact.phone}`}
-              className="group bg-primary-600 hover:bg-primary-700 text-white font-semibold px-8 py-4 rounded-lg transition-all duration-300 flex items-center space-x-2"
-            >
-              <Phone className="w-5 h-5 group-hover:scale-110 transition-transform duration-300" />
-              <span>{ctaText}</span>
-            </a>
+            <CallButtons
+              phone={contact.phone}
+              label={ctaText}
+              className="bg-primary-600 hover:bg-primary-700 text-white font-semibold px-8 py-4 rounded-lg transition-all duration-300 inline-flex items-center gap-2"
+            />
           </motion.div>
 
           {/* Stats */}

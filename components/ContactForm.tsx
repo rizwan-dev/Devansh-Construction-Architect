@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Send, Phone, Mail, MapPin, Clock } from 'lucide-react'
 import { useContactInfo } from '@/lib/useContactInfo'
+import { parsePhones, telHref } from '@/lib/phone'
 
 const ContactForm = () => {
   const contact = useContactInfo()
@@ -75,8 +76,8 @@ const ContactForm = () => {
     {
       icon: Phone,
       title: 'Phone',
-      value: contact.phone,
-      href: `tel:${contact.phone}`
+      value: parsePhones(contact.phone).join(' / '),
+      href: telHref(parsePhones(contact.phone)[0] || '')
     },
     {
       icon: Mail,
@@ -291,7 +292,7 @@ const ContactForm = () => {
             <h4 className="font-semibold text-primary-800 mb-2">Quick Response Guarantee</h4>
             <p className="text-primary-700 text-sm leading-relaxed">
               We respond to all inquiries within 24 hours. For urgent matters,
-              please call us directly at {contact.phone}.
+              please call us directly at {parsePhones(contact.phone).join(' or ')}.
             </p>
           </motion.div>
         </motion.div>

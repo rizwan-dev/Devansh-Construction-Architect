@@ -4,6 +4,7 @@ import { motion } from 'framer-motion'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import { useContactInfo } from '@/lib/useContactInfo'
+import { parsePhones, telHref } from '@/lib/phone'
 import { FileText, Mail, Phone, MapPin } from 'lucide-react'
 
 export default function TermsOfServicePage() {
@@ -210,13 +211,16 @@ export default function TermsOfServicePage() {
                   <Mail className="w-5 h-5 text-primary-600 flex-shrink-0" />
                   <span>{contact.email}</span>
                 </a>
-                <a
-                  href={`tel:${contact.phone}`}
-                  className="flex items-center space-x-3 text-gray-700 hover:text-primary-600 transition-colors duration-200"
-                >
-                  <Phone className="w-5 h-5 text-primary-600 flex-shrink-0" />
-                  <span>{contact.phone}</span>
-                </a>
+                <div className="flex items-start space-x-3 text-gray-700">
+                  <Phone className="w-5 h-5 text-primary-600 flex-shrink-0 mt-0.5" />
+                  <span className="flex flex-wrap gap-x-2">
+                    {parsePhones(contact.phone).map((n) => (
+                      <a key={n} href={telHref(n)} className="hover:text-primary-600 transition-colors duration-200">
+                        {n}
+                      </a>
+                    ))}
+                  </span>
+                </div>
                 <div className="flex items-start space-x-3 text-gray-700">
                   <MapPin className="w-5 h-5 text-primary-600 flex-shrink-0 mt-0.5" />
                   <span>{contact.address}</span>

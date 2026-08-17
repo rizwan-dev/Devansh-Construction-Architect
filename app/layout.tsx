@@ -98,7 +98,7 @@ export default function RootLayout({
               "image": `${SITE_URL}${OG_IMAGE}`,
               "description":
                 "Architecture and construction firm in Pune offering architectural design, 3D visualisation, sanction drawings, Vastu consultation, civil construction and turnkey projects.",
-              "telephone": "+917249400319",
+              "telephone": ["+917249400319", "+917776907669"],
               "email": "devanshconstro@gmail.com",
               "priceRange": "₹₹",
               "currenciesAccepted": "INR",

@@ -7,6 +7,8 @@ import SectionTitle from '@/components/SectionTitle'
 import ContactForm from '@/components/ContactForm'
 import RippleButton from '@/components/RippleButton'
 import { useContactInfo } from '@/lib/useContactInfo'
+import CallButtons from '@/components/CallButtons'
+import { parsePhones, telHref } from '@/lib/phone'
 import { 
   Phone, 
   Mail, 
@@ -31,7 +33,8 @@ export default function ContactPage() {
       icon: Phone,
       title: 'Call Us',
       description: 'Speak directly with our experts',
-      action: `tel:${contact.phone}`,
+      value: parsePhones(contact.phone).join(' / '),
+      action: telHref(parsePhones(contact.phone)[0] || ''),
       color: 'bg-green-100 text-green-600'
     },
     {
@@ -139,22 +142,30 @@ export default function ContactPage() {
                   {method.title}
                 </h3>
                 <p className="text-gray-600 text-sm mb-4 flex-grow">{method.description}</p>
-                {method.value ? (
+                {method.value && method.title !== 'Call Us' ? (
                   <p className="text-primary-600 font-medium mb-4">{method.value}</p>
                 ) : null}
                 <div className="mt-auto">
-                  <RippleButton href={method.action} className="w-full">
-                    <method.icon className="w-4 h-4" />
-                    <span>
-                      {method.title === 'Call Us'
-                        ? 'Call Now'
-                        : method.title === 'WhatsApp'
-                        ? 'Chat Now'
-                        : method.title === 'Email Us'
-                        ? 'Email Now'
-                        : 'Visit'}
-                    </span>
-                  </RippleButton>
+                  {method.title === 'Call Us' ? (
+                    // One button per configured number so each actually dials.
+                    <CallButtons
+                      phone={contact.phone}
+                      stack
+                      alwaysShowNumber
+                      className="inline-flex items-center justify-center gap-2 w-full bg-primary-600 hover:bg-primary-700 text-white font-semibold px-4 py-3 rounded-lg transition-colors duration-200"
+                    />
+                  ) : (
+                    <RippleButton href={method.action} className="w-full">
+                      <method.icon className="w-4 h-4" />
+                      <span>
+                        {method.title === 'WhatsApp'
+                          ? 'Chat Now'
+                          : method.title === 'Email Us'
+                          ? 'Email Now'
+                          : 'Visit'}
+                      </span>
+                    </RippleButton>
+                  )}
                 </div>
               </motion.div>
             ))}
@@ -253,13 +264,11 @@ export default function ContactPage() {
                 we can.
               </p>
               <div className="flex flex-col sm:flex-row gap-3">
-                <a
-                  href={`tel:${contact.phone}`}
+                <CallButtons
+                  phone={contact.phone}
+                  alwaysShowNumber
                   className="inline-flex items-center justify-center gap-2 bg-primary-600 hover:bg-primary-700 text-white font-semibold px-5 py-2.5 rounded-lg transition-colors duration-200 text-sm"
-                >
-                  <Phone className="w-4 h-4" />
-                  <span>Call {contact.phone}</span>
-                </a>
+                />
                 <a
                   href={`https://wa.me/${contact.whatsapp}`}
                   target="_blank"
@@ -327,10 +336,10 @@ export default function ContactPage() {
               Don&apos;t wait! Contact us today and let&apos;s discuss how we can bring your construction or architectural vision to life.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <RippleButton href={`tel:${contact.phone}`} className="bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/30 text-white">
-                <Phone className="w-5 h-5" />
-                <span>Call Now</span>
-              </RippleButton>
+              <CallButtons
+                phone={contact.phone}
+                className="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/30 text-white font-semibold px-8 py-4 rounded-lg transition-colors duration-200"
+              />
               <RippleButton href={`https://wa.me/${contact.whatsapp}`} className="bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/30 text-white">
                 <MessageCircle className="w-5 h-5" />
                 <span>WhatsApp</span>
