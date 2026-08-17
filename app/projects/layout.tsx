@@ -3,7 +3,7 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'Our Projects — Residential & Commercial Portfolio in Pune',
   description:
-    'Explore completed residential and commercial construction projects by Devansh Constro & Architect across Pune, including Dhanori, Kharadi, Lohegaon, Awhalwadi, Manjiri and Junnar.',
+    'Residential and commercial construction projects across Pune — Dhanori, Kharadi, Lohegaon, Awhalwadi, Manjiri, Junnar and Satara.',
   alternates: { canonical: '/projects' },
   openGraph: {
     title: 'Project Portfolio — Devansh Constro & Architect',
