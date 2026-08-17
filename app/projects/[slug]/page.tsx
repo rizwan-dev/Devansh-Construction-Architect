@@ -18,6 +18,16 @@ interface Props {
   params: { slug: string }
 }
 
+// Prebuild a page for every project currently in the store. Without this the
+// route is treated as fully dynamic and Vercel sends `no-store`, so every
+// visit re-rendered and read KV (~300ms TTFB). Projects added from the admin
+// later are still served: dynamicParams defaults to true, so an unknown slug
+// renders on demand and is then cached under the same revalidate window.
+export async function generateStaticParams() {
+  const projects = await getAllProjects()
+  return projects.map((p) => ({ slug: p.id }))
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const project = await getProjectById(params.slug)
   if (!project) return { title: 'Project Not Found' }
